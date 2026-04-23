@@ -36,7 +36,7 @@ exports.calculatePriority = (deadline) => {
 };
 
 // Helper: parse MM/DD/YYYY or YYYY-MM-DD to Date
-// Your existing parseDate function
+//existing parseDate function
 function parseDate(dateStr) {
   if (!dateStr) throw new Error("Deadline missing");
 

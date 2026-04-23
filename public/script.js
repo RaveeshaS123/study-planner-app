@@ -1,7 +1,7 @@
 // Common API base
 const API = "";
 
-// -------------------- LOGIN / REGISTER -------------------- //
+// LOGIN / REGISTER  //
 const loginForm = document.getElementById("loginForm");
 const registerForm = document.getElementById("registerForm");
 
@@ -37,7 +37,7 @@ if (registerForm) {
   });
 }
 
-// -------------------- TASK LOGIC -------------------- //
+//  TASK LOGIC  //
 const taskForm = document.getElementById("taskForm");
 const tasksList = document.getElementById("tasksList");
 const logoutBtn = document.getElementById("logoutBtn");
@@ -54,7 +54,9 @@ const fetchTasks = async () => {
       li.innerHTML = `
         <span>${t.title} - ${t.description} - ${t.deadline} (${t.priority})</span>
         <span class="task-actions">
-          <button onclick="updateTask('${t.id}')">Update</button>
+          <button onclick="updateTask('${t.id}', '${t.title}', '${t.description}', '${t.deadline}')">
+            Update
+          </button>
           <button onclick="deleteTask('${t.id}')">Delete</button>
         </span>
       `;
@@ -82,24 +84,35 @@ const createTask = async (title, description, deadline) => {
   }
 };
 
-const updateTask = async (id) => {
+const updateTask = async (id, oldTitle, oldDescription, oldDeadline) => {
   taskErrorDiv.textContent = "";
-  const title = prompt("New title:");
-  const description = prompt("New description:");
-  const deadline = prompt("New deadline (YYYY-MM-DD):");
-  if (!title || !description || !deadline) return;
+
+  const title = prompt("New title:", oldTitle);
+  const description = prompt("New description:", oldDescription);
+  const deadline = prompt("New deadline (YYYY-MM-DD):", oldDeadline);
+
+  if (title === null || description === null || deadline === null) return;
+
+  const updatedTask = {
+    title: title.trim() || oldTitle,
+    description: description.trim() || oldDescription,
+    deadline: deadline.trim() || oldDeadline,
+  };
 
   try {
     const res = await fetch(`/tasks/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, description, deadline }),
+      body: JSON.stringify(updatedTask),
     });
+
     const data = await res.json();
+
     if (!res.ok) {
       taskErrorDiv.textContent = data.error || "Failed to update task";
       return;
     }
+
     fetchTasks();
   } catch (err) {
     taskErrorDiv.textContent = "Network error. Try again.";
