@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "study-planner"
         VERSION = "v1.${BUILD_NUMBER}"
-        PREVIOUS_VERSION = "v1.${BUILD_NUMBER.minus(1)}"
+        PREVIOUS_VERSION = "v1.${BUILD_NUMBER - 1}"
         GITLAB_PROJECT_ID = "81599171"
     }
     tools {
@@ -79,26 +79,26 @@ pipeline {
          steps {
              withCredentials([string(credentialsId: 'gitlab-token', variable: 'GITLAB_TOKEN')]) {
                 sh """
-            
-             curl --request POST --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-            "https://gitlab.com{GITLAB_PROJECT_ID}/repository/tags?tag_name=${VERSION}&ref=main"
+   
+                     curl --request POST --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+                    "https://gitlab.com{GITLAB_PROJECT_ID}/repository/tags?tag_name=${VERSION}&ref=main"
 
-
-            curl --request POST --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-            --header "Content-Type: application/json" \
-            --data '{
-                "name": "Release ${VERSION}",
-                "tag_name": "${VERSION}",
-                "description": "Automated deployment. Build: ${BUILD_NUMBER}",
-                "assets": {
-                    "links": [{
-                        "name": "View Live App",
-                        "url": "http://localhost:3000"
-                    }]
-                }
-            }' \
-            "https://gitlab.com{GITLAB_PROJECT_ID}/releases"
-            """
+   
+                     curl --request POST --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+                      --header "Content-Type: application/json" \
+                      --data '{
+                        "name": "Release ${VERSION}",
+                        "tag_name": "${VERSION}",
+                        "description": "Automated deployment. Build: ${BUILD_NUMBER}",
+                         "assets": {
+                            "links": [{
+                              "name": "View Live App",
+                              "url": "http://localhost:3000"
+                              }]
+                         }
+                        }' \
+                      "https://gitlab.com{GITLAB_PROJECT_ID}/releases"
+                     """
                         }
                    }
 
