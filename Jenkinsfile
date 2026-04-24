@@ -101,16 +101,20 @@ pipeline {
                    }
        }
 
-       stage('Monitoring Stage - Health Check') {
-              steps {
-                    script {
-                        echo "Waiting for app to start..."
-                        // Give the app 10 seconds to boot up before curling
-                        sleep 20 
-                        sh "curl -f http://host.docker.internal:3000 || exit 1"
-                        echo "App is healthy!"
-                           }
-                    }
+     stage('Monitoring Stage - Health Check') {
+        steps {
+           script {
+               echo "Waiting for app to start..."
+               sleep 20 
+            
+               sh """
+                 curl -f http://host.docker.internal:3000 || \
+                 curl -f http://172.17.0.1:3000 || \
+                 exit 1
+            """
+            echo "App is healthy!"
+                 }
+             }
         }
 
         stage('Build Info Output') {
