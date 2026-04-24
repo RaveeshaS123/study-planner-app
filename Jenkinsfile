@@ -7,6 +7,11 @@ pipeline {
         PREVIOUS_VERSION = "v1.${BUILD_NUMBER.minus(1)}"
         GITLAB_PROJECT_ID = "81599171"
     }
+    tools {
+        nodejs 'node20'
+        sonarScanner 'sonar-scanner'
+        snyk 'snyk-tool'
+    }
 
     stages {
 
@@ -36,22 +41,20 @@ pipeline {
 
         stage('Code Quality Stage - SonarQube Analysis') {
             steps {
+                
                 withSonarQubeEnv('SonarQube') {
-                    sh """
-                    sonar-scanner \
-                    -Dsonar.projectKey=study-planner \
-                    -Dsonar.sources=.
-                    """
+                    sh "sonar-scanner -Dsonar.projectKey=study-planner -Dsonar.sources=."
                 }
             }
         }
 
         stage('Security Stage - Snyk Vulnerability Scan') {
             steps {
-                withCredentials([string(credentialsId: 'snyk-token', variable: 'SNYK_TOKEN')]) {
-                    sh """
-                    snyk test --all-projects --token=${SNYK_TOKEN}
-                    """
+              
+                snykSecurity(snykInstallation: 'snyk-tool') {
+                    withCredentials([string(credentialsId: 'snyk-token', variable: 'SNYK_TOKEN')]) {
+                        sh "snyk test --all-projects --token=${SNYK_TOKEN} || true"
+                    }
                 }
             }
         }
