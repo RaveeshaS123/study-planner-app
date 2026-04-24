@@ -53,13 +53,13 @@ pipeline {
 
 
         stage('Security Stage - Snyk Vulnerability Scan') {
-            steps {
-              
-                snykSecurity(snykInstallation: 'snyk-tool') {
-                    withCredentials([string(credentialsId: 'snyk-token', variable: 'SNYK_TOKEN')]) {
-                        sh "snyk test --all-projects --token=${SNYK_TOKEN} || true"
-                    }
-                }
+             steps {
+        // The plugin uses 'snykTokenId' to find credential
+                snykSecurity(
+                   snykInstallation: 'snyk-tool',
+                   snykTokenId: 'snyk-token',
+                   failOnIssues: false
+               )
             }
         }
 
