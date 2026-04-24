@@ -105,7 +105,7 @@ pipeline {
                     script {
                         echo "Waiting for app to start..."
                         // Give the app 10 seconds to boot up before curling
-                        sleep 10 
+                        sleep 20 
                         sh "curl -f http://host.docker.internal:3000 || exit 1"
                         echo "App is healthy!"
                            }
