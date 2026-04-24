@@ -16,5 +16,9 @@ COPY . .
 # Expose port your app runs on
 EXPOSE 3000
 
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD wget -qO- http://localhost:3000 || exit 1
+
 # Start the app
 CMD ["node", "src/app.js"]

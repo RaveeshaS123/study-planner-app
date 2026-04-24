@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="14" failures="0" errors="0" time="5.874">
+  <testsuite name="Task Service" errors="0" failures="0" skipped="0" timestamp="2026-04-23T23:41:04" time="1.849" tests="4">
+    <testcase classname="Task Service Create task with priority" name="Task Service Create task with priority" time="0.025">
+    </testcase>
+    <testcase classname="Task Service Priority High for deadline &lt;2 days" name="Task Service Priority High for deadline &lt;2 days" time="0.003">
+    </testcase>
+    <testcase classname="Task Service Priority Medium for deadline &lt;5 days" name="Task Service Priority Medium for deadline &lt;5 days" time="0.002">
+    </testcase>
+    <testcase classname="Task Service Throws error for expired task" name="Task Service Throws error for expired task" time="0.036">
+    </testcase>
+  </testsuite>
+  <testsuite name="Tasks API" errors="0" failures="0" skipped="0" timestamp="2026-04-23T23:41:04" time="3.926" tests="5">
+    <testcase classname="Tasks API Create task" name="Tasks API Create task" time="0.06">
+    </testcase>
+    <testcase classname="Tasks API Get tasks" name="Tasks API Get tasks" time="0.02">
+    </testcase>
+    <testcase classname="Tasks API Update task" name="Tasks API Update task" time="0.033">
+    </testcase>
+    <testcase classname="Tasks API Delete task" name="Tasks API Delete task" time="0.028">
+    </testcase>
+    <testcase classname="Tasks API Unauthorized access" name="Tasks API Unauthorized access" time="0.014">
+    </testcase>
+  </testsuite>
+  <testsuite name="Auth API" errors="0" failures="0" skipped="0" timestamp="2026-04-23T23:41:04" time="4.424" tests="5">
+    <testcase classname="Auth API Register new user" name="Auth API Register new user" time="0.422">
+    </testcase>
+    <testcase classname="Auth API Register existing user" name="Auth API Register existing user" time="0.024">
+    </testcase>
+    <testcase classname="Auth API Login with correct credentials" name="Auth API Login with correct credentials" time="0.305">
+    </testcase>
+    <testcase classname="Auth API Login with incorrect credentials" name="Auth API Login with incorrect credentials" time="0.302">
+    </testcase>
+    <testcase classname="Auth API Logout" name="Auth API Logout" time="0.327">
+    </testcase>
+  </testsuite>
+</testsuites>
