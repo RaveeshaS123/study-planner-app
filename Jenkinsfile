@@ -9,7 +9,7 @@ pipeline {
     }
     tools {
         nodejs 'node20'
-        sonarScanner 'sonar-scanner'
+        sonar-scanner 'sonar-scanner'
         snyk 'snyk-tool'
     }
 
