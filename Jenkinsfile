@@ -80,16 +80,16 @@ pipeline {
              withCredentials([string(credentialsId: 'gitlab-token', variable: 'GITLAB_TOKEN')]) {
                 sh """
    
-                     curl --request POST --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-                    "https://gitlab.com{GITLAB_PROJECT_ID}/repository/tags?tag_name=${VERSION}&ref=main"
+                     curl --request POST --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+                    "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID/repository/tags?tag_name=$VERSION&ref=main"
 
    
-                     curl --request POST --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+                     curl --request POST --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
                       --header "Content-Type: application/json" \
                       --data '{
-                        "name": "Release ${VERSION}",
-                        "tag_name": "${VERSION}",
-                        "description": "Automated deployment. Build: ${BUILD_NUMBER}",
+                        "name": "Release $VERSION",
+                        "tag_name": "$VERSION",
+                        "description": "Automated deployment. Build: $BUILD_NUMBER",
                          "assets": {
                             "links": [{
                               "name": "View Live App",
@@ -97,7 +97,7 @@ pipeline {
                               }]
                          }
                         }' \
-                      "https://gitlab.com{GITLAB_PROJECT_ID}/releases"
+                      "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID/releases"
                      """
                         }
                    }
