@@ -72,19 +72,6 @@ pipeline {
                }
             }
         }
-
-         stage('Monitoring Stage - Health Check') {
-              steps {
-                    script {
-                        echo "Waiting for app to start..."
-                        // Give the app 10 seconds to boot up before curling
-                        sleep 10 
-                        sh "curl -f http://localhost:3000 || exit 1"
-                        echo "App is healthy!"
-                           }
-                    }
-        }
-
         stage('Release Stage - GitLab Version Tagging') {
     // Only tag if the health check passed
              steps {
@@ -112,6 +99,18 @@ pipeline {
                         }
                    }
        }
+
+       stage('Monitoring Stage - Health Check') {
+              steps {
+                    script {
+                        echo "Waiting for app to start..."
+                        // Give the app 10 seconds to boot up before curling
+                        sleep 10 
+                        sh "curl -f http://host.docker.internal:3000 || exit 1"
+                        echo "App is healthy!"
+                           }
+                    }
+        }
 
         stage('Build Info Output') {
             steps {
