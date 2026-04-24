@@ -5,6 +5,7 @@ const taskRoutes = require("./routes/taskRoutes");
 const authRoutes = require("./routes/authRoutes");
 
 const app = express();
+client.collectDefaultMetrics(); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -17,6 +18,11 @@ app.use(session({
 
 // Serve frontend
 app.use(express.static(path.join(__dirname, "../public")));
+
+app.get("/metrics", async (req, res) => {
+  res.setHeader('Content-Type', client.register.contentType);
+  res.send(await client.register.metrics());
+});
 
 // Routes
 app.use("/tasks", taskRoutes);
