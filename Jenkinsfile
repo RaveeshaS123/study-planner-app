@@ -9,7 +9,7 @@ pipeline {
     }
     tools {
         nodejs 'node20'
-        hudson.plugins.sonar.SonarRunnerInstallation 'sonar-scanner'
+        sonarScanner 'sonar-scanner' 
         snyk 'snyk-tool'
     }
 
@@ -40,13 +40,16 @@ pipeline {
         }
 
         stage('Code Quality Stage - SonarQube Analysis') {
-            steps {
-                
-                withSonarQubeEnv('SonarQube') {
-                    sh "sonar-scanner -Dsonar.projectKey=study-planner -Dsonar.sources=."
+          steps {
+               script {
+                   def scannerHome = tool 'sonar-scanner'
+                   withSonarQubeEnv('SonarQube') {
+                       sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=study-planner -Dsonar.sources=."
+                    }
                 }
-            }
+           }
         }
+
 
         stage('Security Stage - Snyk Vulnerability Scan') {
             steps {
