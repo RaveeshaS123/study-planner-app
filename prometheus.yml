@@ -5,3 +5,12 @@ scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
+
+  - job_name: 'jenkins'
+    metrics_path: '/prometheus' # Required path for the Jenkins plugin
+    static_configs:
+      - targets: ['host.docker.internal:8084']
+
+  - job_name: 'study-planner-app'
+    static_configs:
+      - targets: ['host.docker.internal:3000']
