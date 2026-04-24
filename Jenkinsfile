@@ -73,17 +73,36 @@ pipeline {
                   }
               }
         }
-        stage('Release Stage - GitLab Version Tagging') {
-    // Only tag if the health check passed
-             steps {
-                  withCredentials([string(credentialsId: 'gitlab-token', variable: 'GITLAB_TOKEN')]) {
-                    sh """
-                    curl --request POST \
-                    --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-                    "https://gitlab.com/api/v4/projects/${GITLAB_PROJECT_ID}/repository/tags?tag_name=${VERSION}&ref=main"
+
+
+        stage('Release Stage - GitLab Version Tagging & Release') {
+         steps {
+             withCredentials([string(credentialsId: 'gitlab-token', variable: 'GITLAB_TOKEN')]) {
+                sh """
+            
+             curl --request POST --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+            "https://gitlab.com{GITLAB_PROJECT_ID}/repository/tags?tag_name=${VERSION}&ref=main"
+
+
+            curl --request POST --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+            --header "Content-Type: application/json" \
+            --data '{
+                "name": "Release ${VERSION}",
+                "tag_name": "${VERSION}",
+                "description": "Automated deployment. Build: ${BUILD_NUMBER}",
+                "assets": {
+                    "links": [{
+                        "name": "View Live App",
+                        "url": "http://localhost:3000"
+                    }]
+                }
+            }' \
+            "https://gitlab.com{GITLAB_PROJECT_ID}/releases"
             """
-                  }
-               }
+                        }
+                   }
+
+
 
                post {
                  failure {
