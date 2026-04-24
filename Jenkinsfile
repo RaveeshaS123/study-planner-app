@@ -8,8 +8,7 @@ pipeline {
         GITLAB_PROJECT_ID = "81599171"
     }
     tools {
-        nodejs 'node20'
-        sonarScanner 'sonar-scanner' 
+        nodejs 'node20' 
         snyk 'snyk-tool'
     }
 
@@ -40,14 +39,16 @@ pipeline {
         }
 
         stage('Code Quality Stage - SonarQube Analysis') {
-          steps {
-               script {
-                   def scannerHome = tool 'sonar-scanner'
-                   withSonarQubeEnv('SonarQube') {
-                       sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=study-planner -Dsonar.sources=."
+            steps {
+                script {
+                    
+                    def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                    
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=study-planner -Dsonar.sources=."
                     }
                 }
-           }
+            }
         }
 
 
