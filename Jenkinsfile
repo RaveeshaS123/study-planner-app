@@ -17,14 +17,18 @@ pipeline {
             }
         }
 
-        stage('Test Stage - Automated Testing (JUnit)') {
+         stage('Test Stage - Automated Testing (JUnit)') {
             steps {
                 echo "Running automated tests..."
-                sh 'npm install'
-                sh 'npm test -- --watchAll=false || true'
+                // This wrapper activates the Node tool
+                nodejs('node20') { 
+                    sh 'npm install'
+                    sh 'npm test -- --watchAll=false || true'
+                }
             }
             post {
                 always {
+                    // This will still look for the report after tests finish
                     junit '**/junit.xml'
                 }
             }
