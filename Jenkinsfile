@@ -9,7 +9,7 @@ pipeline {
     }
     tools {
         nodejs 'node20'
-        sonar-scanner 'sonar-scanner'
+        hudson.plugins.sonar.SonarRunnerInstallation 'sonar-scanner'
         snyk 'snyk-tool'
     }
 
