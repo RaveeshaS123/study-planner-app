@@ -64,13 +64,14 @@ pipeline {
         }
 
         stage('Deploy Stage - Docker Staging Deployment') {
-           steps {
-                script {
-            // Clean up and run
-            sh "docker ps -q -f name=study-planner | xargs -r docker rm -f"
-            sh "docker run -d --name study-planner -p 3000:3000 ${IMAGE_NAME}:${VERSION}"
-               }
-            }
+          steps {
+             script {
+            // Force remove the container by name directly. 
+            // The '|| true' ensures the pipeline continues even if it's the first run.
+              sh "docker rm -f study-planner || true"
+              sh "docker run -d --name study-planner -p 3000:3000 ${IMAGE_NAME}:${VERSION}"
+                  }
+              }
         }
         stage('Release Stage - GitLab Version Tagging') {
     // Only tag if the health check passed
