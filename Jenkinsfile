@@ -74,10 +74,10 @@ pipeline {
            steps {
                 script {
             // Remove the old container to avoid name conflicts
-                  sh "docker rm -f study-planner || true"
+                  sh "docker rm -f app || true"
             
             // Start the container INSIDE the app-network so Prometheus can see it
-                  sh "docker run -d --name study-planner --network study-planner_app-network -p 3000:3000 ${IMAGE_NAME}:${VERSION}"
+                  sh "docker run -d --name app --network study-planner_app-network -p 3000:3000 ${IMAGE_NAME}:${VERSION}"
                        }
                  }
             }
