@@ -29,7 +29,7 @@ pipeline {
                 // This wrapper activates the Node tool
                 nodejs('node20') { 
                     sh 'npm install'
-                    sh 'npm test -- --watchAll=false'
+                    sh 'npm test -- --watchAll=false --coverage'
                 }
             }
             post {
@@ -48,7 +48,11 @@ pipeline {
                                    type: 'hudson.plugins.sonar.SonarRunnerInstallation'
 
                    withSonarQubeEnv('SonarQube') {
-                         sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=study-planner -Dsonar.sources=."
+                         sh """
+                         ${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=study-planner -Dsonar.sources=src \
+                         -Dsonar.tests=tests \
+                         -Dsonar.testExecutionReportPaths=junit.xml \
+                         -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"""
                           }
 
                    timeout(time: 2, unit: 'MINUTES') {
