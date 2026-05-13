@@ -6,6 +6,8 @@ pipeline {
         VERSION = "v1.${BUILD_NUMBER}"
         PREVIOUS_VERSION = "v1.${BUILD_NUMBER - 1}"
         GITLAB_PROJECT_ID = "81599171"
+        TEST_PASSWORD = credentials('test-password')
+        TEST_WRONG_PASSWORD = credentials('test-wrong-password')
     }
     tools {
         nodejs 'node20' 
@@ -27,7 +29,7 @@ pipeline {
                 // This wrapper activates the Node tool
                 nodejs('node20') { 
                     sh 'npm install'
-                    sh 'npm test -- --watchAll=false || true'
+                    sh 'npm test -- --watchAll=false'
                 }
             }
             post {
@@ -39,17 +41,22 @@ pipeline {
         }
 
         stage('Code Quality Stage - SonarQube Analysis') {
-            steps {
+           steps {
                 script {
-                    
-                    def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                    
-                    withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=study-planner -Dsonar.sources=."
+
+                   def scannerHome = tool name: 'sonar-scanner',
+                                   type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+
+                   withSonarQubeEnv('SonarQube') {
+                         sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=study-planner -Dsonar.sources=."
+                          }
+
+                   timeout(time: 2, unit: 'MINUTES') {
+                   waitForQualityGate abortPipeline: true
+                          }
                     }
-                }
+               }
             }
-        }
 
 
         stage('Security Stage - Snyk Vulnerability Scan') {
@@ -58,7 +65,7 @@ pipeline {
                 snykSecurity(
                    snykInstallation: 'snyk-tool',
                    snykTokenId: 'snyk-token',
-                   failOnIssues: false
+                   failOnIssues: true
                )
             }
         }
@@ -151,7 +158,7 @@ pipeline {
 
     post {
         success {
-            echo "Pipeline completed successfully ✔"
+            echo "Pipeline completed successfully"
         }
         failure {
             echo "Pipeline failed - rollback may have been triggered"

@@ -7,11 +7,11 @@ describe("Tasks API", () => {
   beforeAll(async () => {
     await request(app).post("/auth/register").send({
       username: "taskuser",
-      password: "password123"
+      password: process.env.TEST_PASSWORD
     });
     const res = await request(app).post("/auth/login").send({
       username: "taskuser",
-      password: "password123"
+      password: process.env.TEST_PASSWORD
     });
     cookie = res.headers["set-cookie"];
   });

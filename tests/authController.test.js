@@ -5,7 +5,7 @@ describe("Auth API", () => {
   test("Register new user", async () => {
     const res = await request(app).post("/auth/register").send({
       username: "testuser",
-      password: "password123"
+      password: process.env.TEST_PASSWORD
     });
     expect(res.statusCode).toBe(201);
     expect(res.body.message).toBe("User registered");
@@ -14,7 +14,7 @@ describe("Auth API", () => {
   test("Register existing user", async () => {
     const res = await request(app).post("/auth/register").send({
       username: "testuser",
-      password: "password123"
+      password: process.env.TEST_PASSWORD
     });
     expect(res.statusCode).toBe(400);
     expect(res.body.error).toBe("User exists");
@@ -23,7 +23,7 @@ describe("Auth API", () => {
   test("Login with correct credentials", async () => {
     const res = await request(app).post("/auth/login").send({
       username: "testuser",
-      password: "password123"
+      password: process.env.TEST_PASSWORD
     });
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Logged in");
@@ -33,7 +33,7 @@ describe("Auth API", () => {
   test("Login with incorrect credentials", async () => {
     const res = await request(app).post("/auth/login").send({
       username: "testuser",
-      password: "wrongpass"
+      password: process.env.TEST_WRONG_PASSWORD
     });
     expect(res.statusCode).toBe(400);
     expect(res.body.error).toBe("Invalid credentials");
@@ -41,7 +41,7 @@ describe("Auth API", () => {
 
   test("Logout", async () => {
     const agent = request.agent(app);
-    await agent.post("/auth/login").send({ username: "testuser", password: "password123" });
+    await agent.post("/auth/login").send({ username: "testuser", password: process.env.TEST_PASSWORD });
     const res = await agent.get("/auth/logout");
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Logged out");
