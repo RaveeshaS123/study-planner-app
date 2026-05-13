@@ -71,15 +71,16 @@ pipeline {
         }
 
         stage('Deploy Stage - Docker Staging Deployment') {
-          steps {
-             script {
-            // Force remove the container by name directly. 
-            // The '|| true' ensures the pipeline continues even if it's the first run.
-              sh "docker rm -f study-planner || true"
-              sh "docker run -d --name study-planner -p 3000:3000 ${IMAGE_NAME}:${VERSION}"
-                  }
-              }
-        }
+           steps {
+                script {
+            // Remove the old container to avoid name conflicts
+                  sh "docker rm -f study-planner || true"
+            
+            // Start the container INSIDE the app-network so Prometheus can see it
+                  sh "docker run -d --name study-planner --network study-planner_app-network -p 3000:3000 ${IMAGE_NAME}:${VERSION}"
+                       }
+                 }
+            }
 
 
         stage('Release Stage - GitLab Version Tagging & Release') {
