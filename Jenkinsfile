@@ -149,7 +149,7 @@ pipeline {
              }
         }
 
-        stage('Build Info Output') {
+        stage('Build Info Output - new stage') {
             steps {
                 echo "=============================="
                 echo "BUILD SUCCESSFUL"
