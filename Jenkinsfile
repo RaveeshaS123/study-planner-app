@@ -51,6 +51,7 @@ pipeline {
                          sh """
                          ${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=study-planner -Dsonar.sources=src \
                          -Dsonar.tests=tests \
+                         -Dsonar.exclusions=**/*.env,**/node_modules/** \
                          -Dsonar.junit.reportPaths=reports/junit.xml \
                          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"""
                           }
