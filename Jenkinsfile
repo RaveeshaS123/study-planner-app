@@ -149,7 +149,7 @@ pipeline {
              }
         }
 
-        stage('Build Info Output - new stage for demo') {
+        stage('Build Info Output - new stage for demo ') {
             steps {
                 echo "=============================="
                 echo "BUILD SUCCESSFUL"
