@@ -114,7 +114,7 @@ pipeline {
                         }
                    }
 
-        }
+
 
                post {
                  failure {
@@ -130,7 +130,7 @@ pipeline {
                        echo "Deployment successful!"
                         }
                    }
-       
+       }
 
      stage('Monitoring Stage - Health Check') {
         steps {
