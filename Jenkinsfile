@@ -34,7 +34,6 @@ pipeline {
             }
             post {
                always {
-        // Keeps the build from failing even if tests crash before writing the file
                     junit allowEmptyResults: true, testResults: '**/junit.xml'
                 }
             }
@@ -57,7 +56,7 @@ pipeline {
                           }
 
                    timeout(time: 2, unit: 'MINUTES') {
-                   waitForQualityGate abortPipeline: false
+                   waitForQualityGate abortPipeline: true
                           }
                     }
                }
@@ -115,7 +114,7 @@ pipeline {
                         }
                    }
 
-
+        }
 
                post {
                  failure {
@@ -131,7 +130,7 @@ pipeline {
                        echo "Deployment successful!"
                         }
                    }
-       }
+       
 
      stage('Monitoring Stage - Health Check') {
         steps {
